@@ -22,6 +22,6 @@ jobs:
       - uses: pulumi/actions@v3
         with:
           command: up
-          stack-name: stack-name
+          stack-name: aws-ts-apigateway/pricing
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
