@@ -1,6 +1,7 @@
 import { productTable } from '../utils/db';
 import { productsForSeeding } from '../utils/seeder';
 import * as aws from '@pulumi/aws';
+import { v4 as uuidv4 } from 'uuid';
 
 export const seedHandler = async () => {
   let result;
@@ -10,7 +11,7 @@ export const seedHandler = async () => {
     const productDocs = productsForSeeding.map((product) => {
       return {
         pk: product.id,
-        sk: product.region,
+        sk: `${uuidv4()}#${product.region}`,
         region: product.region,
         currency: product.currency,
         centValue: product.centValue,
@@ -41,7 +42,7 @@ export const seedHandler = async () => {
   }
 
   return {
-    statusCode: 200,
+    statusCode: 201,
     body: JSON.stringify({ result }),
   };
 };

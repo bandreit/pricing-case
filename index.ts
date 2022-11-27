@@ -1,8 +1,5 @@
-// Copyright 2016-2019, Pulumi Corporation.  All rights reserved.
-
-import * as aws from '@pulumi/aws';
 import * as awsx from '@pulumi/awsx';
-import { seedHandler, pricesHandler } from './handlers';
+import { seedHandler, pricesHandler, createPriceHandler } from './handlers';
 
 // API endpoints
 const endpoint = new awsx.apigateway.API('pricing', {
@@ -20,7 +17,7 @@ const endpoint = new awsx.apigateway.API('pricing', {
     {
       path: '/products/{productId}/prices',
       method: 'POST',
-      eventHandler: seedHandler,
+      eventHandler: createPriceHandler,
     },
   ],
 });
