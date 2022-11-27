@@ -2,7 +2,7 @@ import { ProductPriceDTO } from '../types/price.type';
 import { v4 as uuidv4 } from 'uuid';
 
 const eifelDK: ProductPriceDTO = {
-  id: '10307',
+  productId: '10307',
   priceId: uuidv4(),
   name: 'Eifel Tower',
   region: 'DK',
@@ -12,7 +12,7 @@ const eifelDK: ProductPriceDTO = {
 };
 
 const eifelUS: ProductPriceDTO = {
-  id: '10307',
+  productId: '10307',
   name: 'Eifel Tower',
   priceId: uuidv4(),
   region: 'US',
@@ -22,7 +22,7 @@ const eifelUS: ProductPriceDTO = {
 };
 
 const titanicDK: ProductPriceDTO = {
-  id: '10294',
+  productId: '10294',
   name: 'Eifel Tower',
   priceId: uuidv4(),
   region: 'DK',

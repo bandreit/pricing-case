@@ -15,12 +15,12 @@ export const pricesHandler = async () => {
     .promise();
 
   const products = Items?.map((item) => {
-    let [priceId, region] = item.sk.split('#');
+    let [productId, priceId] = item.pk.split('#');
     let newProduct: ProductPriceDTO = {
-      id: item.pk,
+      productId,
       name: item.name,
       priceId,
-      region,
+      region: item.region,
       currency: item.currency,
       centValue: item.centValue,
       validFrom: item.validFrom,

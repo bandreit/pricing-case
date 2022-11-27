@@ -10,8 +10,8 @@ export const seedHandler = async () => {
 
     const productDocs = productsForSeeding.map((product) => {
       return {
-        pk: product.id,
-        sk: `${uuidv4()}#${product.region}`,
+        pk: `${product.productId}#${uuidv4()}`,
+        sk: product.region,
         region: product.region,
         currency: product.currency,
         centValue: product.centValue,

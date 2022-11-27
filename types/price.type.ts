@@ -1,5 +1,5 @@
 export interface ProductPriceDTO {
-  id: string;
+  productId: string;
   name: string;
   region: string;
   priceId: string;
@@ -7,4 +7,21 @@ export interface ProductPriceDTO {
   centValue: number;
   validFrom: string;
   validTo?: string;
+}
+
+export interface ProductPriceDbDoc {
+  pk: string;
+  sk: string;
+  region: string;
+  currency: string;
+  centValue: number;
+  validFrom: string;
+  validTo?: string;
+}
+
+export interface PricePayload {
+  region: string;
+  currency: string;
+  centValue: number;
+  validFrom: string;
 }
