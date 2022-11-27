@@ -29,7 +29,7 @@ export const productPricesHandler = async (event: APIGatewayProxyEvent) => {
       },
     };
 
-    if (region !== null) {
+    if (region != null) {
       queryObject = {
         TableName: productTable.name.get(),
         KeyConditionExpression: '#pk = :pk',
