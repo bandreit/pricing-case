@@ -1,2 +1,8 @@
 config:
+  aws-ts-apigateway:audience:
+    secure: AAABAKjLZ5oZ+OjjXPOzKCXkI+ln3373uevNOS6k8HQ8TkUpkvYdQmIB7MJgWMBBXi4Tbfw85cQPlmr41Wp6iv7AR9RTWSv4NPH1SdHMviBROzflZ6rLtBqig03Fpd8y
+  aws-ts-apigateway:issuer:
+    secure: AAABAFJfgx1U3iC1HqOMnASltLg+T9xcQYlA7r/debxUHy0W+dxDG2JfpUO9rtrMpwRv6io0sCxcIqLTK7JIwDg1IITlwlsKAdI=
+  aws-ts-apigateway:jwksUri:
+    secure: AAABAKGdqR+nvrIkHz+rGdf0cp3T5HIzLmGbEfRe5/DHbCvQS6ziCE8uzVPe/cvc5oWvJF5vS93AJ0ITWUrMrkrDkWNVPbEGUhHG61cXxwcl5LvgTPEnDdc/Tfbfl28=
   aws:region: eu-central-1
