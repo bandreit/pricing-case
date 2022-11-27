@@ -3,6 +3,7 @@ import {
   seedHandler,
   pricesHandler,
   createPriceHandler,
+  productPricesHandler,
   updatePriceHandler,
   removePriceHandler,
 } from './handlers';
@@ -19,6 +20,11 @@ const endpoint = new awsx.apigateway.API('pricing', {
       path: '/products/prices',
       method: 'GET',
       eventHandler: pricesHandler,
+    },
+    {
+      path: '/products/{productId}/prices',
+      method: 'GET',
+      eventHandler: productPricesHandler,
     },
     {
       path: '/products/{productId}/prices',

@@ -1,6 +1,5 @@
 import * as aws from '@pulumi/aws';
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { PricePayload, ProductPriceDbDoc } from '../types/price.type';
 import { productTable } from '../utils/db';
 
 export const removePriceHandler = async (event: APIGatewayProxyEvent) => {
