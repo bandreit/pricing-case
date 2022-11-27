@@ -1,5 +1,11 @@
 import * as awsx from '@pulumi/awsx';
-import { seedHandler, pricesHandler, createPriceHandler } from './handlers';
+import {
+  seedHandler,
+  pricesHandler,
+  createPriceHandler,
+  updatePriceHandler,
+  removePriceHandler,
+} from './handlers';
 
 // API endpoints
 const endpoint = new awsx.apigateway.API('pricing', {
@@ -18,6 +24,16 @@ const endpoint = new awsx.apigateway.API('pricing', {
       path: '/products/{productId}/prices',
       method: 'POST',
       eventHandler: createPriceHandler,
+    },
+    {
+      path: '/products/{productId}/prices/{priceId}',
+      method: 'PUT',
+      eventHandler: updatePriceHandler,
+    },
+    {
+      path: '/products/{productId}/prices/{priceId}',
+      method: 'DELETE',
+      eventHandler: removePriceHandler,
     },
   ],
 });

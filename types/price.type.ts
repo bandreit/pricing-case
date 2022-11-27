@@ -24,4 +24,5 @@ export interface PricePayload {
   currency: string;
   centValue: number;
   validFrom: string;
+  validTo?: string;
 }

@@ -4,15 +4,19 @@ import { PricePayload, ProductPriceDbDoc } from '../types/price.type';
 import { productTable } from '../utils/db';
 import { v4 as uuidv4 } from 'uuid';
 
-export const createPriceHandler = async (event: APIGatewayProxyEvent) => {
+export const updatePriceHandler = async (event: APIGatewayProxyEvent) => {
   let result;
 
   try {
     const client = new aws.sdk.DynamoDB.DocumentClient();
     const productId = event.pathParameters!['productId'];
+    const priceId = event.pathParameters!['priceId'];
 
     if (productId == null) {
       throw new Error('No product was specified');
+    }
+    if (priceId == null) {
+      throw new Error('No price was specified');
     }
 
     let body = event.body ?? '{}';
@@ -37,23 +41,47 @@ export const createPriceHandler = async (event: APIGatewayProxyEvent) => {
       throw new Error('No validFrom was specified');
     }
 
-    const priceToCreate: ProductPriceDbDoc = {
-      pk: productId,
-      sk: uuidv4(),
-      region: data.region,
-      currency: data.currency,
-      centValue: data.centValue,
-      validFrom: data.validFrom,
+    if (data.validTo == null) {
+      throw new Error('No validTo was specified');
+    }
+
+    const { currency, region, centValue, validFrom, validTo } = data;
+
+    const patchObject = {
+      ...(currency && { currency }),
+      ...(region && { region }),
+      ...(centValue && { centValue }),
+      ...(validFrom && { validFrom }),
+      ...(validTo && { validTo }),
     };
 
+    let updateExpression = '';
+    let updateExpressionAttributeNames: any = {};
+    let updateExpressionAttributeValues: any = {};
+
+    Object.entries(patchObject).forEach(([key, value]) => {
+      // dynamically build the update expression based on the keys in the patch object
+      updateExpression += `${
+        updateExpression.length > 0
+          ? `, #${key} = :${key} `
+          : `SET #${key} = :${key} `
+      }`;
+      updateExpressionAttributeNames[`#${key}`] = key;
+      updateExpressionAttributeValues[`:${key}`] = value;
+    });
+
     await client
-      .put({
+      .update({
         TableName: productTable.name.get(),
-        Item: priceToCreate,
+        Key: { pk: productId, sk: priceId },
+        UpdateExpression: updateExpression,
+        ExpressionAttributeNames: updateExpressionAttributeNames,
+        ExpressionAttributeValues: updateExpressionAttributeValues,
+        ConditionExpression: 'attribute_exists(pk)',
       })
       .promise();
 
-    result = priceToCreate;
+    result = data;
   } catch (error) {
     let errorBody;
     let errorStatusCode = 500;
@@ -72,7 +100,7 @@ export const createPriceHandler = async (event: APIGatewayProxyEvent) => {
   }
 
   return {
-    statusCode: 201,
+    statusCode: 200,
     body: JSON.stringify(result),
   };
 };
