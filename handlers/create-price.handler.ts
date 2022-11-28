@@ -3,6 +3,7 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import { PricePayload, ProductPriceDbDoc } from '../types/price.type';
 import { productTable } from '../utils/db';
 import { v4 as uuidv4 } from 'uuid';
+import { handleError } from '../utils/errors';
 
 export const createPriceHandler = async (event: APIGatewayProxyEvent) => {
   let result;
@@ -55,20 +56,7 @@ export const createPriceHandler = async (event: APIGatewayProxyEvent) => {
 
     result = priceToCreate;
   } catch (error) {
-    let errorBody;
-    let errorStatusCode = 500;
-
-    if (error instanceof Error) {
-      errorStatusCode = 400;
-      errorBody = error.message;
-    } else {
-      errorBody = error;
-    }
-
-    return {
-      statusCode: errorStatusCode,
-      body: JSON.stringify(errorBody),
-    };
+    return handleError(error);
   }
 
   return {

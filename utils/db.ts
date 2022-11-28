@@ -1,4 +1,6 @@
 import * as aws from '@pulumi/aws';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { ProductPriceDTO } from '../types/price.type';
 
 export const productTable = new aws.dynamodb.Table('Product', {
   attributes: [
@@ -11,4 +13,18 @@ export const productTable = new aws.dynamodb.Table('Product', {
   writeCapacity: 5,
 });
 
-export const client = new aws.sdk.DynamoDB.DocumentClient();
+export const dtosToProducts = (Items: DocumentClient.ItemList) => {
+  return Items?.map((item) => {
+    let newProduct: ProductPriceDTO = {
+      productId: item.pk,
+      name: item.name,
+      priceId: item.sk,
+      region: item.region,
+      currency: item.currency,
+      centValue: item.centValue,
+      validFrom: item.validFrom,
+      validTo: item.validTo,
+    };
+    return newProduct;
+  });
+};

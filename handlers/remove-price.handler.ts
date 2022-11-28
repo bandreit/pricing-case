@@ -1,6 +1,7 @@
 import * as aws from '@pulumi/aws';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { productTable } from '../utils/db';
+import { handleError } from '../utils/errors';
 
 export const removePriceHandler = async (event: APIGatewayProxyEvent) => {
   let result;
@@ -26,20 +27,7 @@ export const removePriceHandler = async (event: APIGatewayProxyEvent) => {
 
     result = priceId;
   } catch (error) {
-    let errorBody;
-    let errorStatusCode = 500;
-
-    if (error instanceof Error) {
-      errorStatusCode = 400;
-      errorBody = error.message;
-    } else {
-      errorBody = error;
-    }
-
-    return {
-      statusCode: errorStatusCode,
-      body: JSON.stringify(errorBody),
-    };
+    return handleError(error);
   }
 
   return {

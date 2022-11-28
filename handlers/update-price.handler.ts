@@ -2,6 +2,7 @@ import * as aws from '@pulumi/aws';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { PricePayload } from '../types/price.type';
 import { productTable } from '../utils/db';
+import { handleError } from '../utils/errors';
 
 export const updatePriceHandler = async (event: APIGatewayProxyEvent) => {
   let result;
@@ -82,20 +83,7 @@ export const updatePriceHandler = async (event: APIGatewayProxyEvent) => {
 
     result = data;
   } catch (error) {
-    let errorBody;
-    let errorStatusCode = 500;
-
-    if (error instanceof Error) {
-      errorStatusCode = 400;
-      errorBody = error.message;
-    } else {
-      errorBody = error;
-    }
-
-    return {
-      statusCode: errorStatusCode,
-      body: JSON.stringify(errorBody),
-    };
+    return handleError(error);
   }
 
   return {

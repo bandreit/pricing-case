@@ -1,7 +1,8 @@
 import * as aws from '@pulumi/aws';
-import { productTable } from '../utils/db';
+import { dtosToProducts, productTable } from '../utils/db';
 import { ProductPriceDTO } from '../types/price.type';
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import { handleError } from '../utils/errors';
 
 export const productPricesHandler = async (event: APIGatewayProxyEvent) => {
   let result: {
@@ -44,36 +45,11 @@ export const productPricesHandler = async (event: APIGatewayProxyEvent) => {
 
     const { Items = [], Count } = await client.query(queryObject).promise();
 
-    const products = Items?.map((item) => {
-      let newProduct: ProductPriceDTO = {
-        productId: item.pk,
-        name: item.name,
-        priceId: item.sk,
-        region: item.region,
-        currency: item.currency,
-        centValue: item.centValue,
-        validFrom: item.validFrom,
-        validTo: item.validTo,
-      };
-      return newProduct;
-    });
+    const products = dtosToProducts(Items);
 
     result = { count: Count || 0, prices: products };
   } catch (error) {
-    let errorBody;
-    let errorStatusCode = 500;
-
-    if (error instanceof Error) {
-      errorStatusCode = 400;
-      errorBody = error.message;
-    } else {
-      errorBody = error;
-    }
-
-    return {
-      statusCode: errorStatusCode,
-      body: JSON.stringify(errorBody),
-    };
+    return handleError(error);
   }
 
   return {
